@@ -1,0 +1,12 @@
+query MobileContinent($code: ID!) {
+  continent(code: $code) {
+    name
+    code
+    countries {
+      code
+      name
+      capital
+      emoji
+    }
+  }
+}
