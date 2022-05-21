@@ -2,9 +2,9 @@ import {Navigation} from 'react-native-navigation';
 import {createApolloWrapperScreen} from '~/misc/functions';
 import {ContinentScreen, CountryScreen, HomeScreen} from '~/screens';
 import WithApollo from './src/graphql';
+import {Linking} from 'react-native';
 
 const startApp = async () => {
-  // await WithApollo.initCache();
   const client = WithApollo.initClient();
   registerScreens(client);
 };
@@ -45,6 +45,53 @@ const start = async () => {
       },
     },
   });
+  getURL();
+};
+
+const getURL = async () => {
+  const url = await Linking.getInitialURL();
+  Linking.addEventListener('url', ({url}) => {
+    handleDeepLinking(url);
+  });
+  if (url !== null) {
+    handleDeepLinking(url);
+  }
+};
+
+const handleDeepLinking = url => {
+  const route = url.replace(/.*?:\/\//g, '');
+  const routeType = route.split('/')[0];
+  const routeId = route.split('/')[1];
+  switch (routeType) {
+    case 'country':
+      Navigation.push(WithApollo.currentScreen, {
+        component: {
+          name: 'CountryScreen',
+          passProps: {
+            code: routeId,
+          },
+          options: {
+            topBar: {
+              visible: true,
+            },
+          },
+        },
+      });
+      break;
+    case 'continent':
+      Navigation.push(WithApollo.currentScreen, {
+        component: {
+          name: 'ContinentScreen',
+          passProps: {
+            code: routeId,
+          },
+        },
+      });
+      break;
+
+    default:
+      break;
+  }
 };
 
 Navigation.events().registerAppLaunchedListener(start);
@@ -67,7 +114,7 @@ const registerScreens = client => {
   );
 };
 
-Navigation.events().registerComponentDidAppearListener(
+Navigation.events().registerComponentWillAppearListener(
   ({componentId, componentName, passProps}) => {
     WithApollo.setCurrentScreen(componentId);
   },
