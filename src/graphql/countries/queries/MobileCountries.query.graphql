@@ -1,0 +1,13 @@
+query MobileCountries($filter: CountryFilterInput) {
+  countries(filter: $filter) {
+    name
+    native
+    capital
+    emoji
+    currency
+    languages {
+      code
+      name
+    }
+  }
+}
