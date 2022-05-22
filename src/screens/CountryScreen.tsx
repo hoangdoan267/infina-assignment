@@ -6,10 +6,8 @@ import {
   NavigationFunctionComponent,
 } from 'react-native-navigation';
 import styled from 'styled-components/native';
-import {
-  useMobileCountryLazyQuery,
-  useMobileCountryQuery,
-} from '../graphql/types-generated';
+import {Loading, Error} from '~/components';
+import {useMobileCountryLazyQuery} from '../graphql/types-generated';
 import {getScreenStyle} from '../misc/getScreenStyle';
 
 type CountryScreenProps = NavigationComponentProps & {
@@ -21,7 +19,7 @@ export const CountryScreen: NavigationFunctionComponent<CountryScreenProps> = (
 ) => {
   const {code, componentId} = props;
 
-  const [getCountry, {data}] = useMobileCountryLazyQuery({
+  const [getCountry, {data, loading, error}] = useMobileCountryLazyQuery({
     variables: {
       code,
     },
@@ -57,32 +55,44 @@ export const CountryScreen: NavigationFunctionComponent<CountryScreenProps> = (
     await getCountry();
   };
 
-  return (
-    <Root>
-      <InformationContainer>
-        <Flag>{data?.country?.emoji}</Flag>
-        <Title>{data?.country?.name}</Title>
-      </InformationContainer>
-      <InformationItem>
-        <InformationName>Code</InformationName>
-        <InformationData>{code}</InformationData>
-      </InformationItem>
-      <InformationItem>
-        <InformationName>Capital</InformationName>
-        <InformationData>{data?.country?.capital}</InformationData>
-      </InformationItem>
-      <InformationItem>
-        <InformationName>Phone Code</InformationName>
-        <InformationData>{`+${data?.country?.phone}`}</InformationData>
-      </InformationItem>
-      <TouchableOpacity activeOpacity={0.8} onPress={goToContinent}>
+  const renderContent = () => {
+    if (loading) {
+      return <Loading />;
+    }
+
+    if (error) {
+      return <Error onTryAgain={getData} />;
+    }
+
+    return (
+      <>
+        <InformationContainer>
+          <Flag>{data?.country?.emoji}</Flag>
+          <Title>{data?.country?.name}</Title>
+        </InformationContainer>
         <InformationItem>
-          <InformationName>Continent</InformationName>
-          <ContinentText>{`${data?.country?.continent.name}`}</ContinentText>
+          <InformationName>Code</InformationName>
+          <InformationData>{code}</InformationData>
         </InformationItem>
-      </TouchableOpacity>
-    </Root>
-  );
+        <InformationItem>
+          <InformationName>Capital</InformationName>
+          <InformationData>{data?.country?.capital}</InformationData>
+        </InformationItem>
+        <InformationItem>
+          <InformationName>Phone Code</InformationName>
+          <InformationData>{`+${data?.country?.phone}`}</InformationData>
+        </InformationItem>
+        <TouchableOpacity activeOpacity={0.8} onPress={goToContinent}>
+          <InformationItem>
+            <InformationName>Continent</InformationName>
+            <ContinentText>{`${data?.country?.continent.name}`}</ContinentText>
+          </InformationItem>
+        </TouchableOpacity>
+      </>
+    );
+  };
+
+  return <Root>{renderContent()}</Root>;
 };
 
 const Root = styled.View`

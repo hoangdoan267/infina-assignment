@@ -6,7 +6,7 @@ import {
   NavigationFunctionComponent,
 } from 'react-native-navigation';
 import styled from 'styled-components/native';
-import {CountryItem} from '../components/CountryItem/CountryItem';
+import {Loading, CountryItem, Error} from '~/components';
 import {Country, useMobileContinentLazyQuery} from '../graphql/types-generated';
 import {getScreenStyle} from '../misc/getScreenStyle';
 
@@ -25,7 +25,7 @@ export const ContinentScreen: NavigationFunctionComponent<ContinentScreennProps>
     return () => {};
   }, []);
 
-  const [getContinent, {data}] = useMobileContinentLazyQuery({
+  const [getContinent, {data, loading, error}] = useMobileContinentLazyQuery({
     variables: {
       code,
     },
@@ -49,30 +49,42 @@ export const ContinentScreen: NavigationFunctionComponent<ContinentScreennProps>
     return <CountryItem item={item} componentId={props.componentId} />;
   };
 
-  return (
-    <Root>
-      <InformationContainer>
-        <InformationItem>
-          <InformationName>Name</InformationName>
-          <InformationData>{data?.continent?.name}</InformationData>
-        </InformationItem>
-        <InformationItem>
-          <InformationName>Code</InformationName>
-          <InformationData>{data?.continent?.code}</InformationData>
-        </InformationItem>
-        <InformationItem>
-          <InformationName>Countries</InformationName>
-        </InformationItem>
-      </InformationContainer>
+  const renderContent = () => {
+    if (loading) {
+      return <Loading />;
+    }
 
-      <FlatList
-        data={data?.continent?.countries}
-        renderItem={renderItem}
-        keyExtractor={el => el.code}
-        showsVerticalScrollIndicator={false}
-      />
-    </Root>
-  );
+    if (error) {
+      return <Error onTryAgain={getData} />;
+    }
+
+    return (
+      <>
+        <InformationContainer>
+          <InformationItem>
+            <InformationName>Name</InformationName>
+            <InformationData>{data?.continent?.name}</InformationData>
+          </InformationItem>
+          <InformationItem>
+            <InformationName>Code</InformationName>
+            <InformationData>{data?.continent?.code}</InformationData>
+          </InformationItem>
+          <InformationItem>
+            <InformationName>Countries</InformationName>
+          </InformationItem>
+        </InformationContainer>
+
+        <FlatList
+          data={data?.continent?.countries}
+          renderItem={renderItem}
+          keyExtractor={el => el.code}
+          showsVerticalScrollIndicator={false}
+        />
+      </>
+    );
+  };
+
+  return <Root>{renderContent()}</Root>;
 };
 
 const Root = styled.View`

@@ -5,17 +5,14 @@ import {
   NavigationFunctionComponent,
 } from 'react-native-navigation';
 import styled from 'styled-components/native';
-import {CountryItem} from '../components/CountryItem/CountryItem';
+import {Loading, CountryItem, Error} from '~/components';
 import {Country, useMobileCountriesLazyQuery} from '../graphql/types-generated';
 import {getScreenStyle} from '../misc/getScreenStyle';
 
-export const HomeScreen: NavigationFunctionComponent<Props> = (
+export const HomeScreen: NavigationFunctionComponent<NavigationComponentProps> = (
   props: NavigationComponentProps,
 ) => {
-  const [
-    getCountries,
-    {data, loading, networkStatus, error},
-  ] = useMobileCountriesLazyQuery({
+  const [getCountries, {data, loading, error}] = useMobileCountriesLazyQuery({
     fetchPolicy: 'cache-and-network',
   });
 
@@ -33,24 +30,35 @@ export const HomeScreen: NavigationFunctionComponent<Props> = (
     return <CountryItem item={item} componentId={props.componentId} />;
   };
 
-  return (
-    <Root>
-      <InformationContainer>
-        <Title>Infina</Title>
-        <Subtitle>Doan Nguyen Hai Hoang</Subtitle>
-      </InformationContainer>
+  const renderContent = () => {
+    if (loading) {
+      return <Loading />;
+    }
+
+    if (error) {
+      return <Error onTryAgain={getData} />;
+    }
+
+    return (
       <FlatList
         data={data?.countries}
         renderItem={renderItem}
         keyExtractor={el => el.code}
         showsVerticalScrollIndicator={false}
       />
+    );
+  };
+
+  return (
+    <Root>
+      <InformationContainer>
+        <Title>Infina</Title>
+        <Subtitle>Doan Nguyen Hai Hoang</Subtitle>
+      </InformationContainer>
+      {renderContent()}
     </Root>
   );
 };
-
-//#region
-type Props = {};
 
 const Root = styled.View`
   flex: 1;
