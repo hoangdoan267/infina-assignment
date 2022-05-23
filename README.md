@@ -6,10 +6,10 @@ An Entrance Coding Challenge from Infiina
 ![GitHub last commit](https://img.shields.io/github/last-commit/hoangdoan267/infina-assignment)
 
 ## Table of contents
-  [1. User Stories](#1-user-stories)
-  [2. Installation](#2-installation)
-  [3. Usage](#3-usage)
-  [4. Use Deep Linking](#4-use-deep-linking)
+  - [1. User Stories](#1-user-stories)
+  - [2. Installation](#2-installation)
+  - [3. Usage](#3-usage)
+  - [4. Use Deep Linking](#4-use-deep-linking)
 
 ### 1. User Stories
 
