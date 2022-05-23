@@ -1,29 +1,61 @@
-## How to work on this mini-project?
+# Infina Code Chanllenge
 
-- Clone this repository to your local machine
-- Create a repository on your GitHub account and submit the solution there when you're done.
-- Send us the URL to your repository via email and we'll contact you with the feedbacks.
+An Entrance Coding Challenge from Infiina
 
-**The API data is at https://countries.trevorblades.com/**.
+[![GitHub issues](https://img.shields.io/github/issues/hoangdoan267/infina-assignment)](https://github.com/hoangdoan267/AspireTest/issues)
+![GitHub last commit](https://img.shields.io/github/last-commit/hoangdoan267/infina-assignment)
 
-To make it easier to breath, this problem spans across 48 hours. You don't have to make it 100% the same to the images, only the idea. We hope to receive your work in its best shape. Please do not hesitate to ask for more information if necessary.
+## Table of contents
 
-# RNHW
+- [Infina Code Chanllenge](#infina-code-chanllenge)
+  - [Table of contents](#table-of-contents)
+    - [1. User Stories](#1-user-stories)
+    - [2. Installation](#2-installation)
+    - [3. Usage](#3-usage)
+    - [3. Use Deep Linking](#3-use-deep-linking)
+        - [iOS](#ios)
+        - [Android](#android)
 
-You took the role to develop a React Native app which has the following features:
+### 1. User Stories
 
-- Show a list of countries
+- [x] As an User, I want to see list of countries in Home Screen
+- [x] As an User, I want to see Country Data when tap in counntry flag
+- [x] As an User, I want to see Continent Data when tap continent in Country Screen
+- [x] As an User, I want see list of countries of Continent in Continent Screen, and see country data when tap in country flag
+- [x] As an User, I want to see Country screen when visits `rnhw://country/:code`
+- [x] As an User, I want to see Continent screen when visits `rnhw://continent/:code`
 
-<img src="problem/1.png" width="300" />
+### 2. Installation
 
-- When user taps on a country, show country screen
+To use this project, follow these steps below:
 
-<img src="problem/2.png" width="300" />
+1. Clone the project: `$ git clone https://github.com/hoangdoan267/infina-assignment.git`
+2. Run: `$ yarn` to install all dependencies
+3. For ios, you have to link native modules using Pod
+   `$ cd ios/ && pod install` or `$ npx pod-install`
+4. Run `$ yarn codegen` to generate code from GraphQL schema
 
-- When user taps on a continent, show continent screen with a list of countries of the continent
+### 3. Usage
 
-<img src="problem/3.png" width="300" />
+Running on iOS
+`$ npx react-native run-ios`
 
-- When user taps on a country on the continent screen, show the country screen again
-- When user visits [rnhw://country/:code](rnhw://country/:code), show country screen
-- When user visits [rnhw://continent/:code](rnhw://continent/:code), show continent screen.
+![iOS](https://i.imgur.com/VRjYnQB.png)
+
+Running on Android
+`$ npx react-native run-android`
+
+![Android](https://i.imgur.com/dpBAxoN.png[/img)
+
+### 3. Use Deep Linking
+
+##### iOS
+
+1. Use Safari: open Safari and enter your link, for example: `rnhw://country/VN`
+2. Use Terminal: Run `npx uri-scheme open "rnhw://country/VN" --ios`
+
+##### Android
+
+1. Use Terminal: Run `npx uri-scheme open "rnhw://country/VN" --android`
+
+[(Back to top)](#table-of-contents)
