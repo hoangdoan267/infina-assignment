@@ -5,7 +5,7 @@ import styled from 'styled-components/native';
 export const Loading = () => {
   return (
     <LoadingContainer>
-      <ActivityIndicator size={'small'} />
+      <ActivityIndicator size={'small'} color="#999999" />
     </LoadingContainer>
   );
 };
